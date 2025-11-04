@@ -1,9 +1,78 @@
-import example.pepita
+import example.*
 
-describe "group of tests for pepita" {
-
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
+describe "group of tests for guerrero" {
+  const fedeWarrior = new Guerrero(aniosServicio=2, vida=500, defensa = 0)
+  const guerreroDesarmado = new Guerrero(equipamientos=[], defensa=200)
+  const matiMago = new Mago(vida = 500, defensa = 0, companiero = fedeWarrior)
+  test "La fuerza de ataque es el danio del equipamiento más el bonus por anios de servicio" {
+    assert.equals(2*100+100+95+0+10, fedeWarrior.fuerzaAtaque())
   }
 
+  test "Sin equipamiento la fuerza de ataque es sólo el plus por servicio" {
+    assert.equals(100*10, guerreroDesarmado.fuerzaAtaque())
+  }
+
+  // Si siguiéramos la teoría de Unit testing, deberíamos probar los danios de cada equipamiento
+
+  test "cuando un guerrero ataca, le resta vida al contrincante (fuerza menos defensa)"{
+    fedeWarrior.atacar(guerreroDesarmado)
+    // 405 fuerza de fedeWarrior
+    assert.equals(1000-(405-200), guerreroDesarmado.vida())
+  }
+  test "cuando un mago ataca, reenvia el ataque a su companiero"{
+    matiMago.atacar(guerreroDesarmado)
+    // 405 fuerza del companiero (fedeWarrior)
+    assert.equals(1000-(405-200), guerreroDesarmado.vida())
+  }
 }
+
+ describe "group of tests for Baston" {
+  const baston = new Baston()
+  const bastonaux = baston
+  test "Baston común debería cambiar a baston Clava con 2 clavos, despues de 3 usos" {
+    baston.danio()
+    baston.danio()
+    baston.danio()
+
+    assert.notThat(bastonaux, baston2.tipo()) // tengo que reformular
+  }
+
+  test "Baston comun debería cambiar a tipo Maza on 1k, con 8 usos" {
+    baston.danio()
+    baston.danio()
+    baston.danio()
+    baston.danio()
+    baston.danio()
+    baston.danio()
+    baston.danio()
+    baston.danio()
+
+    assert.notThat(bastonaux, baston2.tipo()) // tengo que reformular
+  }
+ }
+
+ describe "group of tests for Grupo" {
+  const grupo = new Grupo()
+  const pedroWarrior = new Guerrero(aniosServicio=2, vida=500, defensa = 0, equipamientos = [armaduraDeDefensa, espadaDeVida])
+  const lucilaLaMaga = new Mago(vida = 500, defensa = 0, companiero = pedroWarrior, equipamientos = [armaduraDeDefensa, espadaDeVida])
+  const guerreroDesarmado = new Guerrero(equipamientos=[], defensa=200)
+  const guerreroDesarmado2 = new Guerrero(equipamientos=[], defensa=200)
+  const guerreroDesarmado3 = new Guerrero(equipamientos=[], defensa=200)
+   const guerreroDesarmado4 = new Guerrero(equipamientos=[], defensa=200)
+
+  test "Agrega un nuevo integrante al grupo" {
+    grupo.agregarIntegrante(pedroWarrior)
+    assert.equals(1, grupo.size())
+  }
+
+    test "No puede agregarse un nuevo integrante al grupo por que ya tiene 5" {
+    grupo.agregarIntegrante(pedroWarrior)
+    grupo.agregarIntegrante(lucilaLaMaga)
+    grupo.agregarIntegrante(guerreroDesarmado)
+    grupo.agregarIntegrante(guerreroDesarmado2)
+    grupo.agregarIntegrante(guerreroDesarmado3)
+    
+
+    assert.throws({grupo.agregarIntegrante(guerreroDesarmado4)}, DomainException)
+  }
+ }
